@@ -15,7 +15,7 @@ Possible to emulate several ipbus hardware:
 $ python scripts/runIpbus-hw.py --port=60001,60002,60003...
 
 Write data: 
-$ ./bin/writedata etc/hwconnection.xml dummy.controlhub2.1 4096 98
+$ ./bin/writedata file://etc/hwconnection.xml dummy.controlhub2.1 4096 98
 
 Read data
-$ ./bin/readdata etc/hwconnection.xml dummy.controlhub2.1 4096 
+$ ./bin/readdata file://etc/hwconnection.xml dummy.controlhub2.1 4096 
