@@ -38,3 +38,7 @@ Or start skiroc emulation :
 The data can be readout by daqreaderemulation.cxx (to check everything is ok):
 
 `$ ./bin/daqreaderemulation`
+
+Spy what is happening with the controlhub :
+
+`$ watch -n 1 controlhub_stats`
