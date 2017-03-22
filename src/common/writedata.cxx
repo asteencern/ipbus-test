@@ -16,7 +16,7 @@ int main(int argc, char** argv)
   uint32_t blockSize=4096;//number of uint32_t in on block, WARNING: check address file
   uint32_t seed=0;
   if( argc>1 )
-    deviceName=argv[1];
+    connectionFile=argv[1];
   if( argc>2 )
     deviceName=argv[2];
   if( argc>3 )
