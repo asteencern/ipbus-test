@@ -30,3 +30,11 @@ Write data:
 Read data
 
 `$ ./bin/readdata file://etc/hwconnection.xml controlhub2.1 4096`
+
+Or start skiroc emulation : 
+
+`$ ./bin/skirocemulation 65` 
+
+The data can be readout by daqreaderemulation.cxx (to check everything is ok):
+
+`$ ./bin/daqreaderemulation`
