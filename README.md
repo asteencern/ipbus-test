@@ -25,8 +25,8 @@ Possible to emulate several ipbus hardware:
 
 Write data: 
 
-`$ ./bin/writedata file://etc/hwconnection.xml dummy.controlhub2.1 4096 98`
+`$ ./bin/writedata file://etc/hwconnection.xml controlhub2.1 4096 98`
 
 Read data
 
-`$ ./bin/readdata file://etc/hwconnection.xml dummy.controlhub2.1 4096`
+`$ ./bin/readdata file://etc/hwconnection.xml controlhub2.1 4096`
