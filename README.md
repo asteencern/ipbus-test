@@ -39,6 +39,8 @@ The data can be readout by daqreaderemulation.cxx (to check everything is ok):
 
 `$ ./bin/daqreaderemulation`
 
+To read the data within eudaq, see https://github.com/HGCDAQ/eudaq (branch tb2017 producers/ipbusTest).
+
 Spy what is happening with the controlhub :
 
 `$ watch -n 1 controlhub_stats`
