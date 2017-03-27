@@ -9,12 +9,16 @@
 
 int main(int argc, char** argv)
 {
-  std::string connectionFile="file:///home/asteen/daq-dev/ipbus-test/etc/skirocconnection.xml";
-  std::string deviceName="controlhub2";
+  if( argc<3 ){
+    std::cout << "Wrong arguments: correct usage = bin/skirocemulation file://path/to/connectionFile.xml deviceId seed " << std::endl;
+    return 0;
+  }
+  std::string connectionFile=argv[1];
+  std::string deviceName=argv[2];
   uint32_t blockSize=962;//corresponds to 3848 bytes
   uint32_t seed=0;
-  if( argc>1 )
-    seed=atoi(argv[1]);
+  if( argc>3 )
+    seed=atoi(argv[3]);
 
   uhal::ConnectionManager manager ( connectionFile );
   uhal::HwInterface hw=manager.getDevice ( deviceName );

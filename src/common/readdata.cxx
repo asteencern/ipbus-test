@@ -12,13 +12,13 @@ using namespace uhal;
 int main(int argc, char** argv)
 {
 
-  std::string connectionFile="file:///home/asteen/ipbus-example/etc/hwconnection.xml";
-  std::string deviceName="dummy.controlhub2.1";
+  if( argc<3 ){
+    std::cout << "Wrong arguments: correct usage = bin/skirocemulation file://path/to/connectionFile.xml deviceId seed " << std::endl;
+    return 0;
+  }
+  std::string connectionFile=argv[1];
+  std::string deviceName=argv[2];
   uint32_t blockSize=4096;//number of uint32_t in on block, WARNING: check address file
-  if( argc>1 )
-    connectionFile=argv[1];
-  if( argc>2 )
-    deviceName=argv[2];
   if( argc>3 )
     blockSize=atoi(argv[3]);
 
