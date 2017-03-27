@@ -13,8 +13,10 @@ parser.add_option("-p","--port",type='string',action='callback',
 print options
 
 for i in options.port:
-    startudponport="\"/opt/cactus/bin/uhal/tests/DummyHardwareUdp.exe -p "+i+" -v 2\""
-    cmd="\'bash -c "+startudponport+" \'"
-    cmd="gnome-terminal -e "+cmd
-    print cmd
-    os.system(cmd)
+    startudponport="/opt/cactus/bin/uhal/tests/DummyHardwareUdp.exe -p "+i+" -v 2 &"
+    print startudponport
+    os.system(startudponport)
+
+
+#check port are ope: 
+#netstat -lnup | grep DummyHardware
