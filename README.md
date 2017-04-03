@@ -44,3 +44,25 @@ To read the data within eudaq, see https://github.com/HGCDAQ/eudaq (branch tb201
 Spy what is happening with the controlhub :
 
 `$ watch -n 1 controlhub_stats`
+
+Start more realistic data transfer using RUN_170317_0912.raw.txt (https://cms-docdb.cern.ch/cgi-bin/DocDB/ShowDocument?docid=13285) :
+
+      Open a terminal :
+      
+      `$ source script/env.sh`
+
+      `$ python scripts/runIpbus-hw.py --port=50001,60001,60002,60003,60004,60005`
+      
+      `$./binDummyTrigger file://file./connection.xml 5`, the "5" corresponds to the number of fake boards sending data
+
+      Open another terminal :
+      
+      `$ source script/env.sh`
+
+      Launch boards emulations :
+
+      `$ python scripts/runHexaBoards.py -d HEXABOARD0,HEXABOARD1,HEXABOARD2,HEXABOARD3,HEXABOARD4`, the HEXABOARDi correspond to the names of the 5 boards which are sending data
+
+      Read out the data :
+
+      `$./bin/hexaboardReader file://./connection.xml HEXABOARD0 HEXABOARD1 HEXABOARD2 HEXABOARD3 HEXABOARD4`
