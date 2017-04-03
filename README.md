@@ -33,11 +33,11 @@ Read data
 
 Or start skiroc emulation : 
 
-`$ ./bin/skirocemulation 65` 
+`$ ./bin/skirocemulation file://./etc/skirocconnection.xml controlhub2 65` 
 
 The data can be readout by daqreaderemulation.cxx (to check everything is ok):
 
-`$ ./bin/daqreaderemulation`
+`$ ./bin/daqreaderemulation file://./etc/skirocconnection.xml controlhub2`
 
 To read the data within eudaq, see https://github.com/HGCDAQ/eudaq (branch tb2017 producers/ipbusTest).
 

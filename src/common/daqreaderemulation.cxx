@@ -10,7 +10,7 @@
 int main(int argc, char** argv)
 {
   if( argc<3 ){
-    std::cout << "Wrong arguments: correct usage = bin/skirocemulation file://path/to/connectionFile.xml deviceId seed " << std::endl;
+    std::cout << "Wrong arguments: correct usage = bin/skirocemulation file://path/to/connectionFile.xml deviceId" << std::endl;
     return 0;
   }
   std::string connectionFile=argv[1];
