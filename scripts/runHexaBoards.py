@@ -14,7 +14,7 @@ print options
 
 for i in options.deviceIds:
     start="\"./bin/hexaboardemulation file://./etc/connection.xml "+i+"\""
-    cmd="\'bash -c "+start+" \'"
+    cmd="\'bash -c "+start+" \' &"
     cmd="gnome-terminal -e "+cmd
     print cmd
     os.system(cmd)
