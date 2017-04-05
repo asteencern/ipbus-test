@@ -80,6 +80,7 @@ LIBRARIES =     \
                 -lboost_regex \
                 -lboost_system \
                 -lboost_thread \
+                -lboost_timer \
                 \
                 -lcactus_extern_pugixml \
                 -lcactus_uhal_log \

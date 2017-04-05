@@ -4,8 +4,7 @@
 
 #include <uhal/uhal.hpp>
 #include <boost/thread/thread.hpp>
-
-
+#include <boost/timer/timer.hpp>
 
 class controlInitializer{
 public:
@@ -39,11 +38,14 @@ int main(int argc,char** argv)
   std::ostringstream node( std::ostringstream::ate );
   controlInitializer t; t.init(controlHw,nhexaboard);
   std::vector< uhal::ValWord<uint32_t> > boardstatusVec;
+
+  double meanTimeToRead=0;
+  double evt=0;
   while(1){
     
     uhal::ValWord<uint32_t> busy = controlHw.getNode( "CONTROL.BUSY" ).read( );
     controlHw.dispatch();
-    std::cout << "busy = " << busy << std::endl;
+    //std::cout << "busy = " << busy << std::endl;
     //boost::this_thread::sleep( boost::posix_time::milliseconds(10) );
     if( busy!=1 ){// continue;
       uint32_t a=static_cast<uint32_t>( std::rand() )%10;
@@ -65,23 +67,28 @@ int main(int argc,char** argv)
       uhal::ValWord<uint32_t> w=controlHw.getNode( node.str().c_str() ).read();
       boardstatusVec.push_back(w);
       controlHw.dispatch();
-      std::cout <<  node.str().c_str()  << " = " <<  w  << std::endl;
+      //std::cout <<  node.str().c_str()  << " = " <<  w  << std::endl;
     }
     controlHw.dispatch();
     if( std::find(boardstatusVec.begin(), boardstatusVec.end(), (uint32_t)0)==boardstatusVec.end() ){
       controlHw.getNode( "CONTROL.READ" ).write( (uint32_t)1 );
       controlHw.dispatch();
       uhal::ValWord<uint32_t> readStatus;
+      boost::timer::cpu_timer t;
       while(1){
 	//wait central daq read the data
 	readStatus=controlHw.getNode( "CONTROL.READ" ).read();
 	controlHw.dispatch();
-	std::cout <<  "READ = " <<  readStatus  << std::endl;
+	//std::cout <<  "READ = " <<  readStatus  << std::endl;
 	if( readStatus==0 ) break;
-	//remove the reading procedure : comment 3 previous lines, uncomment 2 following lines
-	//boost::this_thread::sleep( boost::posix_time::milliseconds(10) );
-	//break;
+	// //remove the reading procedure : comment 3 previous lines, uncomment 2 following lines
+	// boost::this_thread::sleep( boost::posix_time::milliseconds(10) );
+	// break;
       }
+      uint16_t ttime=t.elapsed().wall;
+      meanTimeToRead+=ttime/1e9;      
+      evt++;
+      std::cout << "time needed to read = " << ttime/1e9 << "\t average time to read = " << meanTimeToRead/evt << std::endl;
       std::cout << "finished to read data -> relaxe trigger and busy flag" << std::endl;
       controlHw.getNode( "CONTROL.TRIGGER" ).write( (uint32_t)0 );
       controlHw.getNode( "CONTROL.BUSY" ).write( (uint32_t)0 );
