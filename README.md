@@ -33,17 +33,17 @@ Read data
 
 Or start skiroc emulation : 
 
-`$ ./bin/skirocemulation file://./etc/skirocconnection.xml controlhub2 65` 
+`./bin/skirocemulation file://./etc/skirocconnection.xml controlhub2 65` 
 
 The data can be readout by daqreaderemulation.cxx (to check everything is ok):
 
-`$ ./bin/daqreaderemulation file://./etc/skirocconnection.xml controlhub2`
+`./bin/daqreaderemulation file://./etc/skirocconnection.xml controlhub2`
 
 To read the data within eudaq, see https://github.com/HGCDAQ/eudaq (branch tb2017 producers/ipbusTest).
 
 Spy what is happening with the controlhub :
 
-`$ watch -n 1 controlhub_stats`
+`watch -n 1 controlhub_stats`
 
 Start more realistic data transfer using RUN_170317_0912.raw.txt (https://cms-docdb.cern.ch/cgi-bin/DocDB/ShowDocument?docid=13285) :
 
@@ -54,7 +54,7 @@ python scripts/runIpbus-hw.py --port=50001,60001,60002,60003,60004,60005
 ./bin/DummyTrigger file://./etc/connection.xml 5, the "5" corresponds to the number of fake boards sending data
 ```
   * Open another terminal:   
-  `source script/env.sh`
+  `source scripts/env.sh`
   * Launch boards emulations :  
 `python scripts/runHexaBoards.py -d HEXABOARD0,HEXABOARD1,HEXABOARD2,HEXABOARD3,HEXABOARD4`, the HEXABOARDi correspond to the names of the 5 boards which are sending data
   * Read out the data :  
