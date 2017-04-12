@@ -17,15 +17,29 @@ public:
   std::vector<char> &getRawData() { return buffer; }
   std::vector<uint32_t> &getData() { return data; }
   uint32_t checkSum() const {return crc;}
-  void prepareDataBeforeSending()
+  void prepareDataBeforeSending( bool smartDataPackaging=false, bool debug=false )
   {
-    int N=buffer.size()/4;
-    for(int ii=0; ii<N; ii++){
-      uint32_t word=(buffer[ii*4+2]& ~0xFFFFFF00)<<6*4 | (buffer[ii*4+3]& ~0xFFFFFF00)<<4*4 | (buffer[ii*4]& ~0xFFFFFF00) << 2*4 | (buffer[ii*4+1]& ~0xFFFFFF00);
-      data.push_back(word);
+    if(debug) std::cout << std::showbase << std::internal << std::hex << std::setw(8) << std::setfill('0') ;
+    if( smartDataPackaging ){
+      unsigned int N=buffer.size()/4;
+      for(unsigned int ii=0; ii<N; ii++){
+	uint32_t word=(buffer[ii*4+2]& ~0xFFFFFF00)<<6*4 | (buffer[ii*4+3]& ~0xFFFFFF00)<<4*4 | (buffer[ii*4]& ~0xFFFFFF00) << 2*4 | (buffer[ii*4+1]& ~0xFFFFFF00);
+	if(debug)
+	  std::cout << word << " ";
+	data.push_back(word);
+      }
     }
-    std::cout << "data size = " << data.size() << std::endl;
-
+    else{
+      for(unsigned int ii=0; ii<buffer.size(); ii++){
+	uint32_t word= buffer[ii]& ~0xFFFFFF00;
+	if(debug)std::cout << std::hex << std::setw(8) << word << " ";
+	data.push_back(word);
+      }
+    }
+    if(debug){
+      std::cout << "data size = " << std::dec << data.size() << std::endl;
+      getchar();
+    }
     uint32_t* dat=&data[0];
     boost::crc_32_type checksum;
     checksum.process_bytes( dat,(std::size_t)data.size() );
@@ -82,6 +96,12 @@ int main(int argc,char** argv)
       }
     }
   }
+  else{
+    std::cout << "file ./RUN_170317_0912.raw.txt is not in current directory -> exit" << std::endl;
+    sleep(4);
+    return 0;
+  }
+  
 
   std::cout << "events.size() " << events.size() << std::endl;
 
