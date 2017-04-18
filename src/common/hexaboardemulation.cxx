@@ -56,6 +56,20 @@ protected:
 int main(int argc,char** argv)
 {
   size_t N = 30784/4;
+  if( argc<3 ){
+    std::cout << "Wrong arguments: correct usage = bin/hexaboardemulation file://path/to/connectionFile.xml deviceId" << std::endl;
+    getchar();
+    return 0;
+  }
+  std::string connectionFile=argv[1];
+  std::string deviceName=argv[2];
+  bool prepareData=false;
+  if( argc>3 ){
+    std::stringstream ss(argv[3]);
+    if(!(ss >> std::boolalpha >> prepareData )){
+      std::cout << "some unexpected problem" << std::endl;
+    }
+  }
   std::vector<uint32_t> xx;
   std::ifstream file ("./RUN_170317_0912.raw.txt", std::ios::in|std::ios::binary|std::ios::ate);
   uint32_t evtId=0;
@@ -89,7 +103,7 @@ int main(int argc,char** argv)
 	  tmpend[0]=tmpff[0];
 	  evt.addRawData( tmpend[0] );
 	  evtId++;
-	  evt.prepareDataBeforeSending();
+	  evt.prepareDataBeforeSending(prepareData);
 	  events.push_back(evt);
 	  std::cout << "event " << std::dec << evtId << " is ok; raw data size = " << evt.getRawData().size() << std::endl;
 	}
@@ -104,14 +118,6 @@ int main(int argc,char** argv)
   
 
   std::cout << "events.size() " << events.size() << std::endl;
-
-  if( argc<3 ){
-    std::cout << "Wrong arguments: correct usage = bin/hexaboardemulation file://path/to/connectionFile.xml deviceId" << std::endl;
-    getchar();
-    return 0;
-  }
-  std::string connectionFile=argv[1];
-  std::string deviceName=argv[2];
 
   uhal::ConnectionManager manager ( connectionFile );
   uhal::HwInterface hw=manager.getDevice ( deviceName );

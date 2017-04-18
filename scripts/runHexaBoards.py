@@ -9,11 +9,15 @@ parser = OptionParser()
 parser.add_option("-d","--deviceIds",type='string',action='callback',
                   callback=mycallback, dest='deviceIds')
 
+parser.add_option("-p","--prepareData",dest='prepareData',choices=["true","false"], default="false")
+
 (options, args) = parser.parse_args()
 print options
 
+os.system("killall hexaboardemulation")
+
 for i in options.deviceIds:
-    start="\"./bin/hexaboardemulation file://./etc/connection.xml "+i+"\""
+    start="\"./bin/hexaboardemulation file://./etc/connection.xml "+i+" "+options.prepareData+"\""
     cmd="\'bash -c "+start+" \' &"
     cmd="gnome-terminal -e "+cmd
     print cmd

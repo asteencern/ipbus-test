@@ -31,6 +31,13 @@ int main(int argc,char** argv)
   }
   std::string connectionFile=argv[1];
   size_t nhexaboard=atoi(argv[2]);
+  bool waitForDataReadOut=false;
+  if( argc>3 ){
+    std::stringstream ss(argv[3]);
+    if(!(ss >> std::boolalpha >> waitForDataReadOut )){
+      std::cout << "some unexpected problem" << std::endl;
+    }
+  }
 
   uhal::ConnectionManager manager ( connectionFile );  
   uhal::HwInterface controlHw=manager.getDevice ( "DummyControl" );
@@ -76,14 +83,17 @@ int main(int argc,char** argv)
       uhal::ValWord<uint32_t> readStatus;
       boost::timer::cpu_timer t;
       while(1){
-	//wait central daq read the data
-	readStatus=controlHw.getNode( "CONTROL.READ" ).read();
-	controlHw.dispatch();
-	//std::cout <<  "READ = " <<  readStatus  << std::endl;
-	if( readStatus==0 ) break;
-	// //remove the reading procedure : comment 3 previous lines, uncomment 2 following lines
-	// boost::this_thread::sleep( boost::posix_time::milliseconds(10) );
-	// break;
+	if( waitForDataReadOut ){
+	  //wait central daq read the data
+	  readStatus=controlHw.getNode( "CONTROL.READ" ).read();
+	  controlHw.dispatch();
+	  if( readStatus==0 ) break;
+	}
+	else{
+	  //relaxe busy after some time
+	  boost::this_thread::sleep( boost::posix_time::milliseconds(10) );
+	  break;
+	}
       }
       uint16_t ttime=t.elapsed().wall;
       meanTimeToRead+=ttime/1e9;      

@@ -17,11 +17,11 @@ Start ipbus hardware emulation :
 
 Or use the python script :
 
-`python scripts/runIpbus-hw.py --port=60001`
+`python scripts/runIpbus-hw.py --portUDP=60001`
 
 Possible to emulate several ipbus hardware:
 
-`python scripts/runIpbus-hw.py --port=60001,60002,60003`
+`python scripts/runIpbus-hw.py --portUDP=60001,60002,60003`
 
 Write data: 
 
@@ -50,12 +50,12 @@ Start more realistic data transfer using RUN_170317_0912.raw.txt (https://cms-do
 Open a terminal : 
 ```
 source scripts/env.sh
-python scripts/runIpbus-hw.py --port=50001,60001,60002,60003,60004,60005
-./bin/DummyTrigger file://./etc/connection.xml 5, the "5" corresponds to the number of fake boards sending data
+python scripts/runIpbus-hw.py --portUDP=50001,60001,60002,60003,60004,60005
+./bin/DummyTrigger file://./etc/connection.xml 5 true, the "5" corresponds to the number of fake boards sending data, the "true" means that this DummyTrigger will wait until all board has been read out
 ```
   * Open another terminal:   
   `source scripts/env.sh`
   * Launch boards emulations :  
-`python scripts/runHexaBoards.py -d HEXABOARD0,HEXABOARD1,HEXABOARD2,HEXABOARD3,HEXABOARD4`, the HEXABOARDi correspond to the names of the 5 boards which are sending data
+`python scripts/runHexaBoards.py -d HEXABOARD0,HEXABOARD1,HEXABOARD2,HEXABOARD3,HEXABOARD4 -p true`, the HEXABOARDi correspond to the names of the 5 boards which are sending data, the "true" means that the data will be prepared to avoid to send lot of 0s in the data bit stream
   * Read out the data :  
 `./bin/hexaboardReader file://./etc/connection.xml HEXABOARD0 HEXABOARD1 HEXABOARD2 HEXABOARD3 HEXABOARD4`
