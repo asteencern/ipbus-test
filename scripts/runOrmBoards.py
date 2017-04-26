@@ -17,7 +17,7 @@ print options
 os.system("killall ormemulation")
 
 for i in options.deviceIds:
-    start="\"./bin/ormemulation file://./etc/orm-connection.xml "+i+" "+str(options.nSlaves)+"\""
+    start="\"source scripts/env.sh; ./bin/ormemulation file://./etc/orm-connection.xml "+i+" "+str(options.nSlaves)+"\""
     cmd="\'bash -c "+start+" \' &"
     cmd="gnome-terminal -e "+cmd
     print cmd

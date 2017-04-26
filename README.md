@@ -1,7 +1,8 @@
-# ipbus-test 
-Ipbus installation and documentation : https://svnweb.cern.ch/trac/cactus
+# ipbus-test : hgcal branch
 
-The two c++ codes (in src/common) show examples of writting and reading some data with ipbus.
+In this branch, the ormemulation binary is reading raw data from a txt file (which should be copy from anywhere in this directory), creating bit stream according to the expected data format and publishing the data as vector of 32 bits unsigned int. Then, these data should be readout by another program: see HGCDAQ eudaq framework https://github.com/HGCDAQ/eudaq .
+
+Ipbus installation and documentation : https://svnweb.cern.ch/trac/cactus .
 
 Compile the code: 
 
@@ -9,53 +10,15 @@ Compile the code:
 
 `make`
 
-`export LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH`
+Start ipbus hardware emulation with the python script :
 
-Start ipbus hardware emulation : 
+`python scripts/runIpbus-hw.py --portUDP=50001,60001,60002`
 
-`/opt/cactus/bin/uhal/tests/DummyHardwareUdp.exe -p 60001 -v 2`
+This initiates 3 udp ipbus hardware emulation. As it can be seen in etc/orm-connection.xml, port 50001 is expected for the emulation of the sync board. The other ports are for read-out board emulations.
+Start data publication in these ports: 
 
-Or use the python script :
+`python scripts/runOrmBoards.py -d RDOUT_ORM0,RDOUT_ORM1 -N 8
 
-`python scripts/runIpbus-hw.py --portUDP=60001`
+The "8" means that each read-out board contains data from 8 slave boards. The maximum number of slave boards is 8. Each 32 bits word corresponds to 4 bits per slave board. If we run with less than 8 slave boards (eg. 3), the words are filled with zeros (eg. 3*4 bits contain data, the remaining 20 bits are zeros).
 
-Possible to emulate several ipbus hardware:
-
-`python scripts/runIpbus-hw.py --portUDP=60001,60002,60003`
-
-Write data: 
-
-`./bin/writedata file://etc/hwconnection.xml controlhub2.1 4096 98`
-
-Read data
-
-`./bin/readdata file://etc/hwconnection.xml controlhub2.1 4096`
-
-Or start skiroc emulation : 
-
-`./bin/skirocemulation file://./etc/skirocconnection.xml controlhub2 65` 
-
-The data can be readout by daqreaderemulation.cxx (to check everything is ok):
-
-`./bin/daqreaderemulation file://./etc/skirocconnection.xml controlhub2`
-
-To read the data within eudaq, see https://github.com/HGCDAQ/eudaq (branch tb2017 producers/ipbusTest).
-
-Spy what is happening with the controlhub :
-
-`watch -n 1 controlhub_stats`
-
-Start more realistic data transfer using RUN_170317_0912.raw.txt (https://cms-docdb.cern.ch/cgi-bin/DocDB/ShowDocument?docid=13285) :
-
-Open a terminal : 
-```
-source scripts/env.sh
-python scripts/runIpbus-hw.py --portUDP=50001,60001,60002,60003,60004,60005
-./bin/DummyTrigger file://./etc/connection.xml 5 true, the "5" corresponds to the number of fake boards sending data, the "true" means that this DummyTrigger will wait until all board has been read out
-```
-  * Open another terminal:   
-  `source scripts/env.sh`
-  * Launch boards emulations :  
-`python scripts/runHexaBoards.py -d HEXABOARD0,HEXABOARD1,HEXABOARD2,HEXABOARD3,HEXABOARD4 -p true`, the HEXABOARDi correspond to the names of the 5 boards which are sending data, the "true" means that the data will be prepared to avoid to send lot of 0s in the data bit stream
-  * Read out the data :  
-`./bin/hexaboardReader file://./etc/connection.xml HEXABOARD0 HEXABOARD1 HEXABOARD2 HEXABOARD3 HEXABOARD4`
+If in src/common/ormemulation.cxx, lines between 175 and 180 can be uncommented for checking/debugging without the eudaq readout part.

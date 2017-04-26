@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-
-<node> 
-  <node id="HEXA">
-    <node id="FIFO" address="0x0000" size="30788" permission="rw" mode="incremental"/>
-    <node id="CRC" address="0x7844" permission="rw"/>
-  </node>
-</node>
-
