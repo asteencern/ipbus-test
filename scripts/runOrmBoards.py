@@ -11,13 +11,15 @@ parser.add_option("-d","--deviceIds",type='string',action='callback',
 
 parser.add_option("-N","--nSlaves",type='int',dest='nSlaves',default=1)
 
+parser.add_option("-f","--inputfile",type='string',dest='inputfile',default="RUN_170317_0912.raw.txt")
+
 (options, args) = parser.parse_args()
 print options
 
 os.system("killall ormemulation")
 
 for i in options.deviceIds:
-    start="\"source scripts/env.sh; ./bin/ormemulation file://./etc/orm-connection.xml "+i+" "+str(options.nSlaves)+"\""
+    start="\"source scripts/env.sh; ./bin/ormemulation file://./etc/orm-connection.xml "+i+" "+str(options.nSlaves)+" "+options.inputfile+"\""
     cmd="\'bash -c "+start+" \' &"
     cmd="gnome-terminal -e "+cmd
     print cmd

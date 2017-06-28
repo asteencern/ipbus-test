@@ -88,7 +88,10 @@ int main(int argc,char** argv)
   if( argc>3 )
     nslave=atoi( argv[3] );
   std::vector<uint32_t> xx;
-  std::ifstream file ("./RUN_170317_0912.raw.txt", std::ios::in|std::ios::binary|std::ios::ate);
+  std::ifstream file;
+  if( argc>4 )
+    file.open(argv[4],std::ios::in|std::ios::binary|std::ios::ate);
+  else file.open("./RUN_170317_0912.raw.txt", std::ios::in|std::ios::binary|std::ios::ate);
   uint32_t evtId=0;
   std::vector<orm_event> events;
   if (file.is_open()){    
@@ -111,7 +114,8 @@ int main(int argc,char** argv)
 	file.seekg(cursor, std::ios::beg);
 	char* tmp8f = new char[2];
 	file.read ( tmp8f, 2);
-	if( (tmp8f[0]& ~0xFFFFFF00)==0x8f && (tmp8f[1]& ~0xFFFFFF00)==0x8f){
+	if( ((tmp8f[0]& ~0xFFFFFF00)==0x8f || (tmp8f[0]& ~0xFFFFFF00)==0xff) && 
+	    ((tmp8f[1]& ~0xFFFFFF00)==0xff || (tmp8f[1]& ~0xFFFFFF00)==0x8f) ){
 	  cursor+=2;
 	  file.seekg(cursor, std::ios::beg);
 	  evt.addRawData( tmp8f[0] );
@@ -122,6 +126,9 @@ int main(int argc,char** argv)
 	  evtId++;
 	  events.push_back(evt);
 	  std::cout << "event " << std::dec << evtId << " is ok; raw data size = " << evt.getRawData().size() << std::endl;
+	}
+	else{
+	  std::cout << std::hex << (tmp8f[0]& ~0xFFFFFF00) << "\t" << (tmp8f[1]& ~0xFFFFFF00) << std::endl;
 	}
       }
     }
