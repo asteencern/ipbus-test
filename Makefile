@@ -81,6 +81,7 @@ LIBRARIES =     \
                 -lboost_system \
                 -lboost_thread \
                 -lboost_timer \
+		-lboost_program_options \
                 \
                 -lcactus_extern_pugixml \
                 -lcactus_uhal_log \
