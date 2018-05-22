@@ -12,7 +12,7 @@ Compile the code:
 
 Start ipbus hardware emulation with the python script :
 
-`python scripts/runIpbus-hw.py --portUDP=50001,60001,60002`
+`python scripts/runIpbus-hw.py --portUdp=50001,60001,60002`
 
 This initiates 3 udp ipbus hardware emulation. As it can be seen in etc/orm-connection.xml, port 50001 is expected for the emulation of the sync board. The other ports are for read-out board emulations.
 Start data publication in these ports: 
